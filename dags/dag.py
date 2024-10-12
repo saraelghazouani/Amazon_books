@@ -1,11 +1,4 @@
 
-#dag - directed acyclic graph
-
-#tasks : 1) fetch amazon data (extract) 2) clean data (transform) 3) create and store data in table on postgres (load)
-#operators : Python Operator and PostgresOperator
-#hooks - allows connection to postgres
-#dependencies
-
 from datetime import datetime, timedelta
 from airflow import DAG
 import requests
@@ -14,8 +7,6 @@ from bs4 import BeautifulSoup
 from airflow.operators.python import PythonOperator
 from airflow.providers.postgres.operators.postgres import PostgresOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
-
-#1) fetch amazon data (extract) 2) clean data (transform)
 
 headers = {
     "Referer": 'https://www.amazon.com/',
@@ -59,7 +50,6 @@ def get_amazon_data_books(num_books, ti):
                 if title and author and price and rating:
                     book_title = title.text.strip()
                     
-                    # Check if title has been seen before
                     if book_title not in seen_titles:
                         seen_titles.add(book_title)
                         books.append({
@@ -69,25 +59,19 @@ def get_amazon_data_books(num_books, ti):
                             "Rating": rating.text.strip(),
                         })
             
-            # Increment the page number for the next iteration
             page += 1
         else:
             print("Failed to retrieve the page")
             break
 
-    # Limit to the requested number of books
     books = books[:num_books]
     
-    # Convert the list of dictionaries into a DataFrame
     df = pd.DataFrame(books)
     
-    # Remove duplicates based on 'Title' column
     df.drop_duplicates(subset="Title", inplace=True)
     
-    # Push the DataFrame to XCom
     ti.xcom_push(key='book_data', value=df.to_dict('records'))
 
-#3) create and store data in table on postgres (load)
     
 def insert_book_data_into_postgres(ti):
     book_data = ti.xcom_pull(key='book_data', task_ids='fetch_book_data')
