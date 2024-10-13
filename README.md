@@ -3,7 +3,7 @@ This project is an ETL (Extract, Transform, Load) pipeline built using Apache Ai
 ## Project Structure
 ```
 ├── dags
-│   └── amazon_books_dag.py       # DAG definition
+│   └── dag.py       # DAG definition
 ├── docker-compose.yml            # Docker Compose file to setup Airflow and PostgreSQL
 ├── requirements.txt              # Python dependencies for the project
 └── README.md                     # Project documentation
@@ -36,7 +36,7 @@ This project uses Docker Compose to set up the Airflow environment and PostgreSQ
   ## Run project
 ### . Clone the repository
 ```
-git clone https://github.com/yourusername/amazon_books_pipeline.git
+git clone https://github.com/saraelghazouani/amazon_books_pipeline.git
 cd amazon_books_pipeline
 ```
 ### . Install Dependencies
@@ -72,7 +72,7 @@ This will start the following services:
   - Database: postgres
   
 ### . DAG Overview
-The DAG is defined in the file dags/amazon_books_dag.py. It contains the following tasks:
+The DAG is defined in the file dags/dag.py. It contains the following tasks:
 
 - Fetch Amazon Data: Uses a Python script to scrape book data from Amazon.
 
@@ -91,7 +91,7 @@ The DAG is scheduled to run daily.
    The DAG will automatically start fetching, processing, and storing Amazon book data.
 
 ### . Files
-  - amazon_books_dag.py: Contains the DAG definition and task logic for the ETL pipeline.
+  - dag.py: Contains the DAG definition and task logic for the ETL pipeline.
    
   - docker-compose.yml: Configures the Docker containers for Airflow and PostgreSQL.
 
