@@ -41,7 +41,7 @@ This project uses Docker Compose to set up the Airflow environment and PostgreSQ
   ## Run project
 ### . Clone the repository
 ```
-git clone https://github.com/saraelghazouani/amazon_books_pipeline.git
+git clone https://github.com/saraelghazouani/amazon_books.git
 cd amazon_books_pipeline
 ```
 ### . Install Dependencies
