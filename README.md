@@ -1,5 +1,7 @@
 # Amazon Books Data Pipeline
 This project is an ETL (Extract, Transform, Load) pipeline built using Apache Airflow. It extracts book data from Amazon, processes it, and loads it into a PostgreSQL database. The goal is to automate the process of fetching book data from Amazon, cleaning the data, and storing it in a relational database for further analysis or reporting.
+![image](https://github.com/user-attachments/assets/440dd7b3-92b2-42d1-b918-d22adc68c0f8)
+
 ## Project Structure
 ```
 ├── dags
@@ -13,8 +15,11 @@ This project is an ETL (Extract, Transform, Load) pipeline built using Apache Ai
 Apache Airflow is used to manage and schedule the ETL tasks. A Directed Acyclic Graph (DAG) is defined to run tasks in sequence:
 
 Extract: Fetch Amazon book data (e.g., book titles, authors, prices).
+
 Transform: Clean and preprocess the fetched data.
+
 Load: Insert the cleaned data into a PostgreSQL database.
+
 ### PostgreSQL
 A PostgreSQL instance is used as the destination to store the transformed data. A table named books will be created in the database, where each row corresponds to a book and its details.
 
