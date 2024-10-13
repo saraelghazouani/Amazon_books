@@ -18,29 +18,22 @@ headers = {
 
 
 def get_amazon_data_books(num_books, ti):
-    # Base URL of the Amazon search results for data science books
     base_url = f"https://www.amazon.com/s?k=data+engineering+books"
 
     books = []
-    seen_titles = set()  # To keep track of seen titles
-
+    seen_titles = set() 
     page = 1
 
     while len(books) < num_books:
         url = f"{base_url}&page={page}"
         
-        # Send a request to the URL
         response = requests.get(url, headers=headers)
         
-        # Check if the request was successful
         if response.status_code == 200:
-            # Parse the content of the request with BeautifulSoup
             soup = BeautifulSoup(response.content, "html.parser")
             
-            # Find book containers (you may need to adjust the class names based on the actual HTML structure)
             book_containers = soup.find_all("div", {"class": "1804614424"})
             
-            # Loop through the book containers and extract data
             for book in book_containers:
                 title = book.find("span", {"class": "a-size-base-plus a-color-base a-text-normal"})
                 author = book.find("a", {"class": "a-size-base a-link-normal s-underline-text s-underline-link-text s-link-style"})
@@ -87,6 +80,7 @@ def insert_book_data_into_postgres(ti):
         postgres_hook.run(insert_query, parameters=(book['Title'], book['Author'], book['Price'], book['Rating']))
 
 
+
 default_args = {
     'owner': 'airflow',
     'depends_on_past': False,
@@ -95,6 +89,7 @@ default_args = {
     'retry_delay': timedelta(minutes=5),
 }
 
+
 dag = DAG(
     'fetch_and_store_amazon_books',
     default_args=default_args,
@@ -102,8 +97,10 @@ dag = DAG(
     schedule_interval=timedelta(days=1),
 )
 
+
 #operators : Python Operator and PostgresOperator
 #hooks - allows connection to postgres
+
 
 
 fetch_book_data_task = PythonOperator(
@@ -112,6 +109,7 @@ fetch_book_data_task = PythonOperator(
     op_args=[50],  # Number of books to fetch
     dag=dag,
 )
+
 
 create_table_task = PostgresOperator(
     task_id='create_table',
@@ -128,11 +126,13 @@ create_table_task = PostgresOperator(
     dag=dag,
 )
 
+
 insert_book_data_task = PythonOperator(
     task_id='insert_book_data',
     python_callable=insert_book_data_into_postgres,
     dag=dag,
 )
+
 
 #dependencies
 
